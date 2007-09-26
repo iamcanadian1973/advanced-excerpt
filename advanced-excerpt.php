@@ -3,7 +3,7 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
-Version: 0.1
+Version: 0.1.1
 Author: Bas van Doren
 Author URI: http://sparepencil.com/
 */
@@ -123,8 +123,8 @@ class AdvancedExcerpt
 				$text = substr($text, 0, $i) . $ellipsis;
 			}
 			$text = force_balance_tags($text);
-			return $text;
 		}
+		return $text;
 	}
 	
 	function update_options()

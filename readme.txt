@@ -3,13 +3,13 @@ Contributors: basvd
 Tags: excerpt, advanced, post, formatting
 Requires at least: 2.2
 Tested up to: 2.2.2
-Stable tag: 0.1
+Stable tag: 0.1.1
 
 Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
 
 == Description ==
 
-This plugin add several improvements to WordPress' default way of creating excerpts.
+This plugin adds several improvements to WordPress' default way of creating excerpts.
 
 1. It can keep HTML markup in the excerpt (and you get to choose which tags are included)
 2. It trims the excerpt to a given length using either character count or word count
