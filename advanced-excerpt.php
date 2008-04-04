@@ -48,17 +48,18 @@ class AdvancedExcerpt
 		self::AdvancedExcerpt();
 	}
 	
-	function filter($text)
+	function filter($text, $length = null, $use_words = null, $ellipsis = null, $allowed_tags = null)
 	{
 		global $id, $post;
 		
 		// Only make the excerpt if it does not exist
 		if('' == $text) {
-			$length = get_option($this->name . '_length');
-			$use_words = get_option($this->name . '_use_words');
-			$ellipsis = get_option($this->name . '_ellipsis');
+			$length = (!is_null($length)) ? (int) $length : get_option($this->name . '_length');
+			$use_words = (!is_null($use_words)) ? (int) (bool) $use_words : get_option($this->name . '_use_words');
+			$ellipsis = (!is_null($ellipsis)) ? $ellipsis : get_option($this->name . '_ellipsis');
 			
-			$allowed_tags = implode('><',get_option($this->name . '_allowed_tags'));
+			$allowed_tags = (is_array($allowed_tags)) ? $allowed_tags : get_option($this->name . '_allowed_tags');
+			$allowed_tags = implode('><', $allowed_tags);
 			$allowed_tags = '<' . $allowed_tags . '>';
 			
 			$text = get_the_content('');
@@ -167,8 +168,8 @@ class AdvancedExcerpt
 	<?php
 		if ( function_exists('wp_nonce_field') )
 			wp_nonce_field($this->name . '_update_options'); ?>
-		<p class="submit"><input type="submit" name="Submit" value="Update Options &raquo;" /></p>
-		<table class="optiontable">
+		
+		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">Excerpt Length:</th>
 				<td>
@@ -202,7 +203,7 @@ class AdvancedExcerpt
 				</td>
 			</tr>
 		</table>
-		<p class="submit"><input type="submit" name="Submit" value="Update Options &raquo;" /></p>
+		<p class="submit"><input type="submit" name="Submit" value="Save Changes" /></p>
 	</form>
 </div>
 	<?php
