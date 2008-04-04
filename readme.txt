@@ -42,12 +42,12 @@ I haven't had the chance to test the plugin on many versions of WordPress. It ha
 The plugin automatically hooks on `the_excerpt()` function and uses the parameters specified in the options panel. You can also call it manually and specify custom parameters. This can be useful for theme developers.
 The following code is used to call the plugin's filter function:
 
-`$advancedexcerpt->filter($text[, $length, $use\_words, $ellipsis, $allowed\_tags])`
+`$advancedexcerpt->filter($text[, $length, $use_words, $ellipsis, $allowed_tags])`
 
 * `$text` is the full text of whatever you need an excerpt of.
 * `$length` is an integer specifying the length of the excerpt.
-* `$use\_words`, when `1` tells the filter to count words instead of characters.
+* `$use_words`, when `1` tells the filter to count words instead of characters.
 * `$ellipsis` is a string which is appended to the excerpt. Use [HTML entities]( http://www.w3schools.com/tags/ref_entities.asp) for special characters.
-* `$allowed\_tags` is an array of tags that are kept in the excerpt, for example `array('a', 'strong', 'div')`
+* `$allowed_tags` is an array of tags that are kept in the excerpt, for example `array('a', 'strong', 'div')`
 
 Passing `null` to any of these parameters (except for the first) results in the default value being used instead. This way you can change the ellipsis without changing the length, for example.
