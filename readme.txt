@@ -2,8 +2,8 @@
 Contributors: basvd
 Tags: excerpt, advanced, post, formatting
 Requires at least: 2.2
-Tested up to: 2.5
-Stable tag: 0.2
+Tested up to: 2.5.1
+Stable tag: trunk
 
 Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
 
@@ -35,14 +35,14 @@ The default excerpt created by WordPress removes all HTML. If your theme uses `t
 
 = Does it work for WordPress version x.x.x? =
 
-I haven't had the chance to test the plugin on many versions of WordPress. It has been tested on 2.2 through 2.5, but it might work on other versions, too. You can safely try it yourself, because the plugin is unlikely to break anything (it's only an output filter). Please let me know if you succesfully tested it on another version of WordPress.
+I haven't had the chance to test the plugin on many versions of WordPress. It has been tested on 2.2 through 2.5.1, but it might work on other versions, too. You can safely try it yourself, because the plugin is unlikely to break anything (it's only an output filter). Please let me know if you succesfully tested it on another version of WordPress.
 
 = Can I manually call the filter in my WP templates, for example? =
 
 The plugin automatically hooks on `the_excerpt()` function and uses the parameters specified in the options panel. You can also call it manually and specify custom parameters. This can be useful for theme developers.
 The following code is used to call the plugin's filter function:
 
-`$advancedexcerpt->filter($text[, $length, $use_words, $ellipsis, $allowed_tags])`
+`$advancedexcerpt->filter($text, $length, $use_words, $ellipsis, $allowed_tags)`
 
 * `$text` is the full text of whatever you need an excerpt of.
 * `$length` is an integer specifying the length of the excerpt.

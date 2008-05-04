@@ -3,11 +3,10 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
-Version: 0.1.1
+Version: 0.1.2
 Author: Bas van Doren
 Author URI: http://sparepencil.com/
-*/
-/*
+
 Copyright 2007 Bas van Doren
 
 This program is free software; you can redistribute it and/or modify
@@ -37,10 +36,9 @@ class AdvancedExcerpt
 		
 		add_action('admin_menu', array(&$this, 'add_pages'));
 		
-		// Remove the default filter (see /wp-includes/default-filters.php)
+		// Replace the default filter (see /wp-includes/default-filters.php)
 		remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-		// Add the custom filter with low priority so it will be executed last
-		add_filter('get_the_excerpt', array(&$this, 'filter'), 50);
+		add_filter('get_the_excerpt', array(&$this, 'filter'));
 	}
 	
 	function __construct()
@@ -64,7 +62,8 @@ class AdvancedExcerpt
 			
 			$text = get_the_content('');
 			
-			// WP does this to excerpts for a reason that I don't know, better be sure and do it, too, though
+			// T'is important
+			$text = apply_filters('the_content', $text);
 			$text = str_replace(']]>', ']]&gt;', $text);
 			$text = strip_tags($text, $allowed_tags);
 			
