@@ -3,7 +3,7 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
-Version: 0.2.1
+Version: 0.2.2
 Author: Bas van Doren
 Author URI: http://sparepencil.com/
 
@@ -23,14 +23,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Recent changes:
-// - gettext translation support
-// - small UI update for consistency with WP 2.7
-// - multibyte language support (with fallback)
-// - template tag function with wordpress query style arguments
-// - an option has been added to allow for ignoring custom excerpts
-// - options are no longer deleted when the plugin is deactivated (uninstalled)
-
 if(!class_exists('AdvancedExcerpt')) :
 class AdvancedExcerpt
 {
@@ -48,7 +40,7 @@ class AdvancedExcerpt
 		$this->charset = get_bloginfo('charset');
 		
 		// Carefully support multibyte languages
-		if(extension_loaded('mbstring'))
+		if(extension_loaded('mbstring') && function_exists('mb_list_encodings'))
 			$this->mb = in_array($this->charset, mb_list_encodings());
 		
 		load_plugin_textdomain($this->text_domain, PLUGINDIR . '/advanced-excerpt/');
