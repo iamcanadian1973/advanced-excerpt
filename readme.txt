@@ -60,7 +60,7 @@ Your best bet is to use UTF-8 encoding (which WordPress uses by default). If you
 
 The plugin automatically hooks on `the_excerpt()` function and uses the parameters specified in the options panel.
 
-If you don't want to call the filter with different options, you can use `the_advanced_excerpt()` template tag provided by this plugin. This tag accepts [query-string-style parameters](http://codex.wordpress.org/Template_Tags/How_to_Pass_Tag_Parameters#Tags_with_query-string-style_parameters) (theme developers will be familiar with this notation).
+If you want to call the filter with different options, you can use `the_advanced_excerpt()` template tag provided by this plugin. This tag accepts [query-string-style parameters](http://codex.wordpress.org/Template_Tags/How_to_Pass_Tag_Parameters#Tags_with_query-string-style_parameters) (theme developers will be familiar with this notation).
 
 The following parameters can be set:
 
