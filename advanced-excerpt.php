@@ -209,7 +209,7 @@ class AdvancedExcerpt
                 }
                 $text = $this->substr($text, 0, $i);
             }
-            $text = force_balance_tags($text);
+            $text = trim(force_balance_tags($text));
             
             // New filter in WP2.9, seems unnecessary for now
             //$ellipsis = apply_filters('excerpt_more', $ellipsis);
@@ -221,7 +221,7 @@ class AdvancedExcerpt
             }
             
             // Adding the ellipsis
-            if(($pos = strpos($text, '</p>', strlen($text) - 6)) !== false)
+            if(($pos = strpos($text, '</p>', strlen($text) - 7)) !== false)
             {
                 // Stay inside the last paragraph (if it's in the last 6 characters)
                 $text = substr_replace($text, $ellipsis, $pos, 0);

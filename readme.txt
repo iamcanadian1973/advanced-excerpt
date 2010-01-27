@@ -14,7 +14,7 @@ This plugin adds several improvements to WordPress' default way of creating exce
 
 1. It can keep HTML markup in the excerpt (and you get to choose which tags are included)
 2. It trims the excerpt to a given length using either character count or word count
-3. You can customise the excerpt length and the ellipsis character that will be used when trimming
+3. You can customize the excerpt length and the ellipsis character that will be used when trimming
 4. A read-more link can be added automatically
 4. The excerpt length is *real* (everything belonging to HTML tags is not counted)
 5. Can ignore custom excerpts and use the generated one instead
@@ -26,7 +26,7 @@ This plugin is also compatible with Shortcodes.
 
 Version 3.0 may not be backwards compatible. Check and re-apply the settings after you upgrade to make sure everything works correctly.
 
-Version 0.2.1 adds support for multibyte characters (eg. Chinese and Japanese). This is slightly experimental, more details in the FAQ.
+Version 0.2.1 adds support for multibyte characters (e.g. Chinese and Japanese). This is slightly experimental, more details in the FAQ.
 Plugin translations are fully supported and language files are included for translation. The FAQ provides more info on this, also.
 
 == Installation ==
@@ -42,11 +42,11 @@ After you've downloaded and extracted the files:
 
 = Why do I need this plugin? =
 
-The default excerpt created by WordPress removes all HTML. If your theme uses `the_excerpt()` to view excerpts, they might look weird because of this (e.g. smilies are removed, lists are flattened, etc.) This plugin fixes that and also gives you more control over excerpts.
+The default excerpt created by WordPress removes all HTML. If your theme uses `the_excerpt()` to view excerpts, they might look weird because of this (smilies are removed, lists are flattened, etc.) This plugin fixes that and also gives you more control over excerpts.
 
 = Does it work for WordPress version x.x.x? =
 
-I haven't had the chance to test the plugin on many versions of WordPress. It has recently been tested on 2.9, but it might work on other versions, too. You can safely try it yourself, because the plugin is unlikely to break anything (it's only an output filter). Please let me know if you succesfully tested it on another version of WordPress.
+I haven't had the chance to test the plugin on many versions of WordPress. It has recently been tested on 2.9, but it might work on other versions, too. You can safely try it yourself, because the plugin is unlikely to break anything (it's only an output filter). Please let me know if you successfully tested it on another version of WordPress.
 
 = Is this plugin available in my language? / How do I translate this plugin? =
 
@@ -79,7 +79,7 @@ The following parameters can be set:
 * `allowed_tags`, a comma-separated list of HTML tags that are allowed in the excerpt. Entering `_all` will preserve all tags.
 * `exclude_tags`, a comma-separated list of HTML tags that must be removed from the excerpt. Using this setting in combination with `allowed_tags` makes no sense
 
-A custom, advanced excerpt call could look like this:
+A custom advanced excerpt call could look like this:
 
 `the_advanced_excerpt('length=320&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img,p,strong');`
 
@@ -92,10 +92,10 @@ You can, however, consider to [start The Loop manually](http://codex.wordpress.o
 
 = 3.0 =
 
-* Major release since 0.2.2 (also removed the `0.` prefix from the version number)
+* First major release since 0.2.2 (also removed the `0.` prefix from the version number)
 * Feature: Shortcodes can be removed from the excerpt
 * Feature: Virtually any HTML tag may now be stripped
 * Feature: A read-more link with custom text can be added
-* Fix: Word-based trimming speed improved
+* Fix: Word-based excerpt speed improved
 * Fix: Template tag function improved
-* Fix: Improved ellipsis placement
+* Fix: Better ellipsis placement
