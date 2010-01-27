@@ -3,7 +3,7 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
-Version: 3.0
+Version: 3.1
 Author: Bas van Doren
 Author URI: http://sparepencil.com/
 
@@ -123,7 +123,7 @@ class AdvancedExcerpt
     {
         // Merge custom parameters
         if(is_array($this->custom_options))
-            $r = array_merge($this->custom_options, $this->default_options);
+            $r = array_merge($this->default_options, $this->custom_options);
         else
             $r = $this->default_options;
         
@@ -185,19 +185,24 @@ class AdvancedExcerpt
                 // Characters
                 
                 // Count characters, not whitespace, not those belonging to HTML tags
-                if($length > $this->strlen(strip_tags($text)))
+                if($length >= $this->strlen(preg_replace('/[\s]+/', '', strip_tags($text))))
                     return $text;
                 
                 $in_tag = false;
                 $n_chars = 0;
                 for($i = 0; $n_chars < $length || $in_tag; $i++)
                 {
-                    // TODO: Improve this loop
-                    
                     $char = $this->substr($text, $i, 1);
                     // Is the character worth counting (ie. not part of an HTML tag)
                     if($char == '<')
+                    {
                         $in_tag = true;
+                        if(($pos = strpos($text, '>', $i)) !== false)
+                        {
+                            $i = $pos - 1;
+                            continue;
+                        }
+                    }
                     elseif($char == '>')
                         $in_tag = false;
                     elseif(!$in_tag && '' != trim($char))
@@ -209,6 +214,7 @@ class AdvancedExcerpt
                 }
                 $text = $this->substr($text, 0, $i);
             }
+            
             $text = trim(force_balance_tags($text));
             
             // New filter in WP2.9, seems unnecessary for now

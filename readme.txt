@@ -4,7 +4,7 @@ Tags: excerpt, advanced, post, posts, template, formatting
 Donate link: http://sparepencil.com/code/advanced-excerpt/
 Requires at least: 2.2
 Tested up to: 2.9
-Stable tag: 3.0
+Stable tag: 3.1
 
 Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
 
@@ -89,6 +89,10 @@ No, this plugin fetches the post from The Loop and there is currently no way to 
 You can, however, consider to [start The Loop manually](http://codex.wordpress.org/The_Loop#Multiple_Loops).
 
 == Changelog ==
+
+= 3.1 =
+
+* Fix: A few bugs with custom and character-based excerpts
 
 = 3.0 =
 
