@@ -145,71 +145,50 @@ if (!class_exists('AdvancedExcerpt')):
           $text = strip_tags($text, $tag_string);
         }
 
-        if (1 == $use_words)
-        {
-          // Words
+        // TODO: Add these options
+        $finish_word = false;
+        $finish_sentence = false;
 
-          // Skip if text is already within limit
-          if ($length >= count(preg_split('/[\s]+/', strip_tags($text))))
-            return $text;
-
-          // Split on whitespace and start counting (for real)
-          $text_bits = preg_split('/([\s]+)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-          $in_tag    = false;
-          $n_words   = 0;
-          $text      = '';
-          foreach ($text_bits as $chunk)
-          {
-            if (!in_tag || strpos($chunk, '>') !== false)
-              $in_tag = (strrpos($chunk, '>') < strrpos($chunk, '<'));
-
-            // Whitespace outside tags is word separator
-            if (!$in_tag && '' == trim($chunk))
-              $n_words++;
-
-            if ($n_words >= $length && !$in_tag)
-              break;
-
-            $text .= $chunk;
+        $tokens = array();
+        $out = '';
+        $w = 0;
+        // Divide the string into tokens; HTML tags, or words, followed by any whitespace
+        // (<[^>]+>|[^<>\s]+\s*)
+        preg_match_all('/(<[^>]+>|[^<>\s]+)\s*/u', $text, $tokens);
+        foreach($tokens[0] as $t)
+        { // Parse each token
+          if($w >= $length && !$finish_sentence)
+          { // Limit reached
+            break;
           }
-        }
-        else
-        {
-          // Characters
-
-          // Count characters, not whitespace, not those belonging to HTML tags
-          if ($length >= $this->strlen(preg_replace('/[\s]+/', '', strip_tags($text))))
-            return $text;
-
-          $in_tag  = false;
-          $n_chars = 0;
-          for ($i = 0; $n_chars < $length || $in_tag; $i++)
-          {
-            // FIXME: I suspect this loop might take very looong...
-            $char = $this->substr($text, $i, 1);
-            // Is the character worth counting (ie. not part of an HTML tag)
-            if ($char == '<')
-            {
-              // Skip to the end of the tag
-              if (($pos = strpos($text, '>', $i)) !== false)
-              {
-                $i = $pos;
-                continue;
-              }
-              else
-                break;
+          if($t[0] != '<')
+          { // Token is not a tag
+            if($w >= $length && $finish_sentence && preg_match('/[\?\.\!]\s*$/uS', $t) == 1)
+            { // Limit reached, continue until ? . or ! occur at the end
+              $out .= trim($t);
+              break;
             }
-            elseif ('' != trim($char))
-              $n_chars++;
-
-            // Prevent eternal loops (this could happen with incomplete HTML tags)
-            if ($i >= $this->strlen($text) - 1)
-              break;
+            if(1 == $use_words)
+            { // Count words
+              $w++;
+            }
+            else
+            { // Count/trim characters
+              $chars = trim($t); // Remove surrounding space
+              $c = $this->strlen($chars);
+              if($c + $w > $length && !$finish_sentence)
+              { // Token is too long
+                $c = ($finish_word) ? $c : $length - $w; // Keep token to finish word
+                $t = $this->substr($t, 0, $c);
+              }
+              $w += $c;
+            }
           }
-          $text = $this->substr($text, 0, $i);
+          // Append what's left of the token
+          $out .= $t;
         }
 
-        $text = trim(force_balance_tags($text));
+        $text = trim(force_balance_tags($out));
 
         // New filter in WP2.9, seems unnecessary for now
         //$ellipsis = apply_filters('excerpt_more', $ellipsis);
