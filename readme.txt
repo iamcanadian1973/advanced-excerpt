@@ -24,11 +24,6 @@ In addition to keeping HTML markup in the excerpt, the plugin also corrects HTML
 
 This plugin is also compatible with Shortcodes.
 
-Version 3.0 may not be backwards compatible. Check and re-apply the settings after you upgrade to make sure everything works correctly.
-
-Version 0.2.1 adds support for multibyte characters (e.g. Chinese and Japanese). This is slightly experimental, more details in the FAQ.
-Plugin translations are fully supported and language files are included for translation. The FAQ provides more info on this, also.
-
 == Installation ==
 
 After you've downloaded and extracted the files:
@@ -61,7 +56,7 @@ First of all, it should be noted that word-based excerpt length only works if yo
 PHP's support for multibyte characters is not perfect. The plugin provides support for these characters to the best of its ability, but there are no guarantees that everything will work.
 Your best bet is to use UTF-8 encoding (which WordPress uses by default). If you still encounter problems, check with your host if the *mbstring* PHP extension is enabled on your server.
 
-= Can I manually call the filter in my WP templates, for example? =
+= Can I manually call the filter in my WP theme or plugin? =
 
 The plugin automatically hooks on `the_excerpt()` function and uses the parameters specified in the options panel.
 
