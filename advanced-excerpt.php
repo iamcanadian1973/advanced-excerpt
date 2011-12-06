@@ -1,4 +1,4 @@
-<?php
+  <?php
 /*
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
@@ -107,16 +107,17 @@ if (!class_exists('AdvancedExcerpt')):
       ));
     }
 
+    // Deprecated: php-4 support
     function __construct()
     {
       self::AdvancedExcerpt();
     }
 
-    function filter($text)
+    function filter($text, $options = null)
     {
-      // Merge custom parameters
-      if (is_array($this->custom_options))
-        $r = array_merge($this->default_options, $this->custom_options);
+      // Merge options
+      if (is_array($options))
+        $r = array_merge($this->default_options, $options);
       else
         $r = $this->default_options;
 
@@ -194,13 +195,14 @@ if (!class_exists('AdvancedExcerpt')):
         //$ellipsis = apply_filters('excerpt_more', $ellipsis);
 
         // Read more
-        if (1 == $add_link)
+        if ($add_link)
         {
           $ellipsis = $ellipsis . sprintf(' <a href="%s" class="read_more">%s</a>', get_permalink(), $read_more);
         }
 
         // Adding the ellipsis
-        if (($pos = strpos($text, '</p>', max(0, strlen($text) - 7))) !== false)
+        $pos = strpos($text, '</p>', max(0, strlen($text) - 7));
+        if ($pos !== false)
         {
           // Stay inside the last paragraph (if it's in the last 6 characters)
           $text = substr_replace($text, $ellipsis, $pos, 0);
@@ -225,6 +227,8 @@ if (!class_exists('AdvancedExcerpt')):
       add_option($this->name . '_use_words', 1);
       add_option($this->name . '_no_custom', 0);
       add_option($this->name . '_no_shortcode', 1);
+      add_option($this->name . '_finish_word', 0);
+      add_option($this->name . '_finish_sentence', 0);
       add_option($this->name . '_ellipsis', '&hellip;');
       add_option($this->name . '_read_more', 'Read the rest');
       add_option($this->name . '_add_link', 0);
@@ -245,10 +249,12 @@ if (!class_exists('AdvancedExcerpt')):
         'use_words' => get_option($this->name . '_use_words'),
         'no_custom' => get_option($this->name . '_no_custom'),
         'no_shortcode' => get_option($this->name . '_no_shortcode'),
+        'finish_word' => get_option($this->name . '_finish_word'),
+        'finish_sentence' => get_option($this->name . '_finish_sentence'),
         'ellipsis' => get_option($this->name . '_ellipsis'),
         'read_more' => get_option($this->name . '_read_more'),
         'add_link' => get_option($this->name . '_add_link'),
-        'allowed_tags' => get_option($this->name . '_allowed_tags')
+        'allowed_tags' => (array) get_option($this->name . '_allowed_tags')
       );
     }
 
@@ -259,6 +265,8 @@ if (!class_exists('AdvancedExcerpt')):
       $use_words    = ('on' == $_POST[$this->name . '_use_words']) ? 1 : 0;
       $no_custom    = ('on' == $_POST[$this->name . '_no_custom']) ? 1 : 0;
       $no_shortcode = ('on' == $_POST[$this->name . '_no_shortcode']) ? 1 : 0;
+      $finish_word     = ('on' == $_POST[$this->name . '_finish_word']) ? 1 : 0;
+      $finish_sentence = ('on' == $_POST[$this->name . '_finish_sentence']) ? 1 : 0;
       $add_link     = ('on' == $_POST[$this->name . '_add_link']) ? 1 : 0;
 
       $ellipsis  = (get_magic_quotes_gpc() == 1) ? stripslashes($_POST[$this->name . '_ellipsis']) : $_POST[$this->name . '_ellipsis'];
@@ -270,6 +278,8 @@ if (!class_exists('AdvancedExcerpt')):
       update_option($this->name . '_use_words', $use_words);
       update_option($this->name . '_no_custom', $no_custom);
       update_option($this->name . '_no_shortcode', $no_shortcode);
+      update_option($this->name . '_finish_word', $finish_word);
+      update_option($this->name . '_finish_sentence', $finish_sentence);
       update_option($this->name . '_ellipsis', $ellipsis);
       update_option($this->name . '_read_more', $read_more);
       update_option($this->name . '_add_link', $add_link);
@@ -335,6 +345,22 @@ if (!class_exists('AdvancedExcerpt')):
                     <?php _e('(use <a href="http://www.w3schools.com/tags/ref_entities.asp">HTML entities</a>)', $this->text_domain); ?>
                     <br />
                     <?php _e("Will substitute the part of the post that is omitted in the excerpt.", $this->text_domain); ?>
+                </td>
+            </tr>
+            <tr valign="top">
+                <th scope="row"><label for="<?php echo $this->name; ?>_length">
+                <?php _e("Finish:", $this->text_domain); ?></label></th>
+                <td>
+                    <input name="<?php echo $this->name; ?>_finish_word" type="checkbox"
+                           id="<?php echo $this->name; ?>_finish_word" value="on"<?php
+                           echo (1 == $finish_word) ? ' checked="checked"' : ''; ?>/>
+                           <?php _e("Word", $this->text_domain); ?><br/>
+                    <input name="<?php echo $this->name; ?>_finish_sentence" type="checkbox"
+                           id="<?php echo $this->name; ?>_finish_sentence" value="on"<?php
+                           echo (1 == $finish_sentence) ? ' checked="checked"' : ''; ?>/>
+                           <?php _e("Sentence", $this->text_domain); ?>
+                    <br />
+                    <?php _e("Prevents cutting a word or sentence at the end of an excerpt. This option can result in (slightly) longer excerpts.", $this->text_domain); ?>
                 </td>
             </tr>
             <tr valign="top">
