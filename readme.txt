@@ -1,10 +1,10 @@
 === Advanced Excerpt ===
 Contributors: basvd
 Tags: excerpt, advanced, post, posts, template, formatting
-Donate link: http://sparepencil.com/code/advanced-excerpt/
+Donate link: http://basvd.com/code/advanced-excerpt/
 Requires at least: 2.2
-Tested up to: 2.9
-Stable tag: 3.1
+Tested up to: 3.2.1
+Stable tag: 4.0
 
 Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
 
@@ -30,7 +30,7 @@ After you've downloaded and extracted the files:
 
 1. Upload the complete `advanced-excerpt` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to 'Excerpt' under the 'Options' tab and configure the plugin
+3. Go to 'Excerpt' under the 'Settings' menu and configure the plugin
 
 
 == Frequently Asked Questions ==
@@ -68,6 +68,8 @@ The following parameters can be set:
 * `use_words`, if set to `1`, the excerpt length will be in words; if set to `0`, characters will be used for the count
 * `no_custom`, if set to `1`, an excerpt will be generated even if the post has a custom excerpt; if set to `0`, the custom excerpt will be used
 * `no_shortcode`, if set to `1`, shortcodes are removed from the excerpt; if set to `0`, shortcodes will be parsed
+* `finish_word`, if set to `1`, the last word in the excerpt will not be cut off; if set to `0`, no effort is made to finish the word
+* `finish_sentence`, if set to `1`, the last sentence in the excerpt will not be cut off; if set to `0`, no effort is made to include the full sentence
 * `ellipsis`, the string that will substitute the omitted part of the post; if you want to use HTML entities in the string, use `%26` instead of the `&` prefix to avoid breaking the query
 * `read_more`, the text used in the read-more link
 * `add_link`, if set to `1`, the read-more link will be appended; if `0`, no link will be added
@@ -84,6 +86,11 @@ No, this plugin fetches the post from The Loop and there is currently no way to 
 You can, however, consider to [start The Loop manually](http://codex.wordpress.org/The_Loop#Multiple_Loops).
 
 == Changelog ==
+
+= 4.0 =
+* Feature: Brand new parsing algorithm which should resolve some running time issues
+* Feature: Options to finish a word or sentence before cutting the excerpt
+* Fix: A few small bugs
 
 = 3.1 =
 
