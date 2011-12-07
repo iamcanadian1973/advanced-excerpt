@@ -1,4 +1,4 @@
-  <?php
+<?php
 /*
 Plugin Name: Advanced Excerpt
 Plugin URI: http://sparepencil.com/code/advanced-excerpt/
