@@ -1,11 +1,11 @@
-  <?php
+<?php
 /*
 Plugin Name: Advanced Excerpt
-Plugin URI: http://sparepencil.com/code/advanced-excerpt/
+Plugin URI: http://basvd.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
 Version: 4.0
 Author: Bas van Doren
-Author URI: http://sparepencil.com/
+Author URI: http://basvd.com/
 
 Copyright 2007 Bas van Doren
 
@@ -107,11 +107,91 @@ if (!class_exists('AdvancedExcerpt')):
       ));
     }
 
-    // Deprecated: php-4 support
-    function __construct()
+    function dom_filter($text, $options = null)
     {
-      self::AdvancedExcerpt();
+      require_once "simple_html_dom.php";
+      
+      // Merge options
+      if (is_array($options))
+        $r = array_merge($this->default_options, $options);
+      else
+        $r = $this->default_options;
+
+      extract($r, EXTR_SKIP);
+      
+      // Only make the excerpt if it does not exist or 'No Custom Excerpt' is set to true
+      if ('' == $text || $no_custom)
+      {
+        $text = $this->the_content();
+        $dom = str_get_html($text);
+        $dom = dom_walk($dom, $length);
+      }
     }
+    
+    function dom_walk($dom, $length)
+    {
+      $e = $dom->first_child();
+      $n = 0;
+      while($n < $length)
+      {
+        // Parse plaintext between elements
+        // TODO: Trim?
+        $p = strlen($pre);
+        $q = strpos($dom->innertext, '<', $p);
+        if($q === false) $q = strlen($dom->innertext);
+        $t = substr($dom->innertext, $p, $q - $p);
+        $pre .= $t;
+        $n += $this->word_count($t);
+        
+        // Parse child element
+        if($e != null && $n < $length)
+        {
+          $c = $this->word_count($e->plaintext);
+          if($c > $n)
+          { // Continue recursion
+            $r = dom_walk($e, $length - $n);
+            $n += $this->word_count($r->plaintext);
+            $pre .= $r->outertext;
+          }
+          else
+          { // Append
+            $pre .= $e->outertext;
+            $n += $c;
+          }
+          $e = $e->next_sibling();
+        }
+        else
+        {
+          // Done!
+          break;
+        }
+      }
+      $dom = new simple_html_dom();
+      $dom->load($pre);
+      return $dom;
+    }
+    
+    // Get the full content and filter it
+    function the_content()
+    {
+      // Get the full content and filter it
+      $text = get_the_content('');
+      if (1 == $no_shortcode)
+        $text = strip_shortcodes($text);
+      $text = apply_filters('the_content', $text);
+
+      // From the default wp_trim_excerpt():
+      // Some kind of precaution against malformed CDATA in RSS feeds I suppose
+      $text = str_replace(']]>', ']]&gt;', $text);
+      return $text;
+    }
+    
+    // UTF-8 compatible word count
+    function word_count($str)
+    {
+      return preg_match_all("/\p{L}[\p{L}\p{Mn}\p{Pd}'\x{2019}]*/u", $str, $matches);
+    }
+
 
     function filter($text, $options = null)
     {
@@ -126,15 +206,7 @@ if (!class_exists('AdvancedExcerpt')):
       // Only make the excerpt if it does not exist or 'No Custom Excerpt' is set to true
       if ('' == $text || $no_custom)
       {
-        // Get the full content and filter it
-        $text = get_the_content('');
-        if (1 == $no_shortcode)
-          $text = strip_shortcodes($text);
-        $text = apply_filters('the_content', $text);
-
-        // From the default wp_trim_excerpt():
-        // Some kind of precaution against malformed CDATA in RSS feeds I suppose
-        $text = str_replace(']]>', ']]&gt;', $text);
+        $text = $this->the_content();
 
         // Strip HTML if allow-all is not set
         if (!in_array('_all', $allowed_tags))
@@ -172,11 +244,11 @@ if (!class_exists('AdvancedExcerpt')):
             else
             { // Count/trim characters
               $chars = trim($t); // Remove surrounding space
-              $c = $this->strlen($chars);
+              $c = strlen($chars);
               if($c + $w > $length && !$finish_sentence)
               { // Token is too long
                 $c = ($finish_word) ? $c : $length - $w; // Keep token to finish word
-                $t = $this->substr($t, 0, $c);
+                $t = substr($t, 0, $c);
               }
               $w += $c;
             }
@@ -477,28 +549,8 @@ if (!class_exists('AdvancedExcerpt')):
         'page_script'
       ));
     }
-
-    // Careful multibyte support (fallback to normal functions if not available)
-
-    function substr($str, $start, $length = null)
-    {
-      $length = (is_null($length)) ? $this->strlen($str) : $length;
-      if ($this->mb)
-        return mb_substr($str, $start, $length, $this->charset);
-      else
-        return substr($str, $start, $length);
-    }
-
-    function strlen($str)
-    {
-      if ($this->mb)
-        return mb_strlen($str, $this->charset);
-      else
-        return strlen($str);
-    }
-
+    
     // Some utility functions
-
     function set_complement($a, $b)
     {
       $c = array_diff($a, $b);
