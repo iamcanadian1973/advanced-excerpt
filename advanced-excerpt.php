@@ -85,7 +85,7 @@ if (!class_exists('AdvancedExcerpt')):
       $this->load_options();
       
       load_plugin_textdomain($this->text_domain, false, dirname(plugin_basename(__FILE__)));
-      register_activation_hook(plugin_dir_path(__FILE__), array(
+      register_activation_hook(__FILE__, array(
         &$this,
         'install'
       ));
@@ -151,7 +151,7 @@ if (!class_exists('AdvancedExcerpt')):
       $text = $this->text_excerpt($text, $length, $use_words, $finish_word, $finish_sentence);
 
       // Add the ellipsis or link
-      $text = $this->text_add_more($text, $ellipsis, (!$add_link) ? $read_more : false);
+      $text = $this->text_add_more($text, $ellipsis, ($add_link) ? $read_more : false);
 
       return $text;
     }
