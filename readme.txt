@@ -90,6 +90,9 @@ However, you can [start The Loop manually](http://codex.wordpress.org/The_Loop#M
 
 == Changelog ==
 
+= 4.1.1 =
+* Fix: Template function bug (no output)
+
 = 4.1 =
 * Fix: Template function with custom options works again
 * Fix: Data before header bug (retro-fixed in 4.0)
