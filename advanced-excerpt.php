@@ -466,7 +466,7 @@ if (!class_exists('AdvancedExcerpt')):
   AdvancedExcerpt::Instance();
 
   // Do not use outside the Loop!
-  function the_advanced_excerpt($args = '', $get = true)
+  function the_advanced_excerpt($args = '', $get = false)
   {
     if (!empty($args) && !is_array($args))
     {
