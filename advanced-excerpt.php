@@ -3,7 +3,7 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://basvd.com/code/advanced-excerpt/
 Description: Several improvements over WP's default excerpt. The size of the excerpt can be limited using character or word count, and HTML markup is not removed.
-Version: 4.1
+Version: 4.1.1
 Author: Bas van Doren
 Author URI: http://basvd.com/
 

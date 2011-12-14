@@ -4,7 +4,7 @@ Tags: excerpt, advanced, post, posts, template, formatting
 Donate link: http://basvd.com/code/advanced-excerpt/
 Requires at least: 3.2
 Tested up to: 3.3
-Stable tag: 4.1
+Stable tag: 4.1.1
 
 Several improvements over WP's default excerpt. The size can be limited using character or word count, and HTML markup is not removed.
 
